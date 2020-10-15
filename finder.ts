@@ -18,6 +18,8 @@ export type Options = {
   className: (name: string) => boolean
   tagName: (name: string) => boolean
   attr: (name: string, value: string) => boolean
+  title: (name: string) => boolean
+  name: (name: string) => boolean
   seedMinLength: number
   optimizedMinLength: number
   threshold: number
@@ -42,6 +44,8 @@ export function finder(input: Element, options?: Partial<Options>) {
     className: (name: string) => true,
     tagName: (name: string) => true,
     attr: (name: string, value: string) => false,
+    title: (name: string) => true,
+    name: (name: string) => true,
     seedMinLength: 1,
     optimizedMinLength: 2,
     threshold: 1000,
@@ -87,7 +91,7 @@ function bottomUpSearch(input: Element, limit: Limit, fallback?: () => Path | nu
   let i = 0
 
   while (current && current !== config.root.parentElement) {
-    let level: Node[] = maybe(id(current)) || maybe(...attr(current)) || maybe(...classNames(current)) || maybe(tagName(current)) || [any()]
+    let level: Node[] = maybe(title(current)) || maybe(name(current)) || maybe(id(current)) || maybe(...attr(current)) || maybe(...classNames(current)) || maybe(tagName(current)) || [any()]
 
     const nth = index(current)
 
@@ -181,12 +185,35 @@ function unique(path: Path) {
   }
 }
 
+function title(input: Element): Node | null {
+  var elementTitle = input.getAttribute('title');
+  if (elementTitle && config.title(elementTitle)) {
+      return {
+          name: '[title="' + cssesc(elementTitle, { isIdentifier: true }) + '"]',
+          penalty: 0
+      }
+  }
+  return null
+}
+
+function name(input: Element): Node | null {
+  var elementName= input.getAttribute('name');
+  if (elementName && config.name(elementName)) {
+      return {
+          name: '[name="' + cssesc(elementName, { isIdentifier: true }) + '"]',
+          penalty: 0.2
+      }
+  }
+  return null
+}
+
+
 function id(input: Element): Node | null {
   const elementId = input.getAttribute("id")
   if (elementId && config.idName(elementId)) {
     return {
       name: "#" + cssesc(elementId, {isIdentifier: true}),
-      penalty: 0,
+      penalty: 0.7,
     }
   }
   return null
@@ -197,7 +224,7 @@ function attr(input: Element): Node[] {
 
   return attrs.map((attr): Node => ({
     name: "[" + cssesc(attr.name, {isIdentifier: true}) + "=\"" + cssesc(attr.value) + "\"]",
-    penalty: 0.5
+    penalty: 0.3
   }))
 }
 
@@ -207,7 +234,7 @@ function classNames(input: Element): Node[] {
 
   return names.map((name): Node => ({
     name: "." + cssesc(name, {isIdentifier: true}),
-    penalty: 1
+    penalty: 0.5
   }))
 }
 

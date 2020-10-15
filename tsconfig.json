@@ -8,6 +8,6 @@
     ],
     "strict": true,
     "declaration": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
   }
 }

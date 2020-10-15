@@ -1,10 +1,10 @@
 {
-  "name": "@medv/finder",
+  "name": "finder",
   "version": "2.0.0",
   "description": "CSS Selector Generator",
-  "repository": "antonmedv/finder",
-  "homepage": "https://github.com/antonmedv/finder",
-  "author": "Anton Medvedev <anton@medv.io>",
+  "repository": "",
+  "homepage": "",
+  "author": "",
   "license": "MIT",
   "keywords": [
     "css",
@@ -22,7 +22,7 @@
     "test": "tsc && ava",
     "prepare": "tsc",
     "release": "release-it --access public",
-    "size": "minify finder.js --sourceType module | gzip-size"
+    "size": "minify index.js --sourceType module | gzip-size"
   },
   "devDependencies": {
     "ava": "^3.8.2",

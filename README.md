@@ -17,22 +17,12 @@
 
 ## Install
 
-```bash
-npm install @medv/finder
-```
-
 Finder can be used via modules:
-
-```html
-<script type="module">
-  import {finder} from 'https://medv.io/finder/finder.js'
-</script>
-```
 
 ## Usage 
 
 ```js
-import {finder} from '@medv/finder'
+const { finder } = require('finder')
 
 document.addEventListener('click', event => {
   const selector = finder(event.target)
@@ -58,6 +48,8 @@ const selector = finder(event.target, {
   className: (name) => true,
   tagName: (name) => true,
   attr: (name, value) => false,
+  title: (name) => true,
+  name: (name) => true,
   seedMinLength: 1,
   optimizedMinLength: 2,
   threshold: 1000,
@@ -88,6 +80,14 @@ const selector = finder(event.target, {
   className: name => !name.startsWith('is-')
 })
 ```
+
+#### `name: (name: string) => boolean`
+
+Check if name can be used.
+
+#### `title: (name: string) => boolean`
+
+Check if title can be used.
 
 #### `tagName: (name: string) => boolean`
 
